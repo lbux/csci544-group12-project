@@ -9,5 +9,6 @@ dependencies = [
     "networkx>=3.6.1",
     "onnx>=1.21.0",
     "optimum[onnxruntime]>=2.1.0",
+    "plotly>=6.7.0",
     "transformers>=4.57.6",
 ]
