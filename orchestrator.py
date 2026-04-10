@@ -1,12 +1,8 @@
-from networkx.classes.digraph import DiGraph
-
-
+from collections import defaultdict
 from typing import Any
 
-
-from collections import defaultdict
-
 import networkx as nx
+from networkx.classes.digraph import DiGraph
 
 from interfaces import (
     InterventionAgent,
@@ -102,7 +98,7 @@ class ModerationOrchestrator:
 
         # TODO: Add an actual threshold that works for our data. This is a generic placeholder.
         if score >= 0.6:
-            # This would be the result of the agent. We have a category for type of toxicity, how many points to 
+            # This would be the result of the agent. We have a category for type of toxicity, how many points to
             # penalize, and the reasoning from the agent.
             reasoning: ReasoningResult = self.reasoner.analyze_intent(
                 text, parent_text, root_context
