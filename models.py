@@ -1,7 +1,5 @@
 import torch
-from optimum.onnxruntime import (  # pyright: ignore[reportMissingTypeStubs]
-    ORTModelForSequenceClassification,
-)
+from optimum.onnxruntime import ORTModelForSequenceClassification
 from transformers import AutoTokenizer
 
 

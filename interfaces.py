@@ -1,4 +1,4 @@
-from typing import Protocol, TypedDict
+from typing import Protocol, TypedDict, NotRequired
 
 
 class Comment(TypedDict):
@@ -7,16 +7,17 @@ class Comment(TypedDict):
     body: str
     created_utc: float
     replies: list["Comment"]
-    toxicity: float
+    toxicity: NotRequired[float]
 
 
 class RedditThread(TypedDict):
     submission_id: str
     author: str
     title: str
-    body: str
+    body: NotRequired[str]
     created_utc: float
     comments: list[Comment]
+    body_toxicity: NotRequired[float]
 
 
 class ReasoningResult(TypedDict):

@@ -8,47 +8,71 @@ class ThreadFilter:
     def __init__(
         self,
         classifier: ToxicityClassifier,
-        threshold: float = 0.4,
         max_threads: int = 5,
+        chain_threshold: float = 0.75,
+        chain_length: int = 2,
     ) -> None:
         self.classifier: ToxicityClassifier = classifier
-        self.threshold: float = threshold
         self.max_threads: int = max_threads
+        self.chain_threshold: float = chain_threshold
+        self.chain_length: int = chain_length
 
-    def _get_all_texts(self, comments: list[Comment]) -> list[str]:
-        texts: list[str] = []
-        for comment in comments:
-            texts.append(comment["body"])
-            if comment.get("replies"):
-                texts.extend(self._get_all_texts(comment["replies"]))
-        return texts
+    def _enrich_and_score_tree(self, comments: list[Comment]) -> None:
+        """Recursively scores and adds the 'toxicity' key to every comment in place."""
+        for c in comments:
+            if "toxicity" not in c:
+                c["toxicity"] = self.classifier.predict(text=c["body"])
+            if c.get("replies"):
+                self._enrich_and_score_tree(comments=c["replies"])
 
-    def calculate_average_toxicity(self, thread: RedditThread) -> float:
-        """Scores the main post and all comments to find the thread's average toxicity."""
-        texts: list[str] = [thread["title"]] + self._get_all_texts(thread["comments"])
+    def has_toxic_chain(self, comments: list[Comment], current_streak: int = 0) -> bool:
+        """Checks if there is a continuous chain of replies exceeding the threshold."""
+        for c in comments:
+            score: float = c.get("toxicity", 0.0)
+            streak: int = current_streak + 1 if score >= self.chain_threshold else 0
+            if streak >= self.chain_length:
+                return True
+            if self.has_toxic_chain(c.get("replies", []), streak):
+                return True
+        return False
 
-        if not texts:
-            return 0.0
+    # While this would have been cool, the model either scores posts at 0.0 or 0.95-99 most of the time
+    # def has_high_escalation(self, comments: list[Comment], parent_score: float = 0.0) -> bool:
+    #     """Finds if any reply spikes drastically in toxicity compared to its parent."""
+    #     for c in comments:
+    #         score: float = c.get("toxicity", 0.0)
 
-        total_score = sum(self.classifier.predict(text) for text in texts)
-        return total_score / len(texts)
+    #         if (score - parent_score) >= self.escalation_delta:
+    #             return True
+    #         if self.has_high_escalation(c.get("replies", []), score):
+    #             return True
+    #     return False
 
-    def filter_file(self, jsonl_path: str) -> list[RedditThread]:
-        """Reads a .jsonl file and returns a subset of highly toxic threads."""
+    def filter_file(self, input_jsonl: str, output_jsonl: str) -> list[RedditThread]:
         selected_threads: list[RedditThread] = []
 
-        with open(jsonl_path, "r", encoding="utf-8") as f:
-            for line in f:
+        with (
+            open(input_jsonl, "r", encoding="utf-8") as infile,
+            open(output_jsonl, "w", encoding="utf-8") as outfile,
+        ):
+            for line in infile:
                 if len(selected_threads) >= self.max_threads:
                     break
 
                 thread_data: RedditThread = cast(RedditThread, json.loads(line))
-                avg_tox = self.calculate_average_toxicity(thread_data)
 
-                if avg_tox >= self.threshold:
-                    print(
-                        f"Selected Thread: {thread_data['submission_id']} | Avg Tox: {avg_tox:.2f}"
-                    )
+                post_text: str = thread_data.get("body", "") or thread_data.get(
+                    "title", ""
+                )
+                if "body_toxicity" not in thread_data:
+                    thread_data["body_toxicity"] = self.classifier.predict(post_text)
+
+                self._enrich_and_score_tree(thread_data["comments"])
+
+                is_chain: bool = self.has_toxic_chain(thread_data["comments"])
+
+                if is_chain:
+                    print(f"Selected Thread: {thread_data['submission_id']}")
                     selected_threads.append(thread_data)
-
-        return selected_threads
+                    _ = outfile.write(json.dumps(thread_data) + "\n")
+            return selected_threads

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections import defaultdict
 from typing import Any
 
@@ -45,7 +47,7 @@ class ModerationOrchestrator:
         self.tracker: UserStateTracker = UserStateTracker()
         self.graph: DiGraph[Any] = nx.DiGraph()  # pyright: ignore[reportExplicitAny]
 
-    def process_thread(self, thread: RedditThread) -> nx.DiGraph:  # pyright: ignore[reportUnknownParameterType, reportMissingTypeArgument]
+    def process_thread(self, thread: RedditThread) -> nx.DiGraph[str]:
         """Converts a thread to a graph and processes it chronologically to allow for scoring comments as they \"arrive\""""
         self.graph.clear()
 

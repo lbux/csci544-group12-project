@@ -1,10 +1,8 @@
-from optimum.onnxruntime import (  # pyright: ignore[reportMissingTypeStubs]
+from optimum.onnxruntime import (
     ORTModelForSequenceClassification,
     ORTQuantizer,
 )
-from optimum.onnxruntime.configuration import (  # pyright: ignore[reportMissingTypeStubs]
-    AutoQuantizationConfig,
-)
+from optimum.onnxruntime.configuration import AutoQuantizationConfig
 from transformers import AutoTokenizer
 
 model_path = "models/cga_deberta"
