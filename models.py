@@ -15,7 +15,6 @@ def download_model() -> None:
         _ = snapshot_download(
             repo_id="lbux/cga-deberta-onnx-int8",
             local_dir=model_path,
-            local_dir_use_symlinks=False,
         )
 
 
@@ -24,7 +23,8 @@ class ToxicityClassifier:
         self.tokenizer = AutoTokenizer.from_pretrained("models/cga_deberta_onnx_int8")  # pyright: ignore[reportUnknownMemberType, reportUnannotatedClassAttribute]
 
         self.ort_model = ORTModelForSequenceClassification.from_pretrained(  # pyright: ignore[reportUnknownMemberType, reportUnannotatedClassAttribute]
-            "models/cga_deberta_onnx_int8", file_name="model_quantized.onnx"
+            "models/cga_deberta_onnx_int8",
+            file_name="model_quantized.onnx",
         )
 
     def predict(self, text: str) -> float:
