@@ -33,7 +33,7 @@ class InterventionResult(TypedDict):
     tone_used: str
 
 
-class ToxicityClassifier(Protocol):
+class ToxicityScorer(Protocol):
     def predict(self, text: str) -> float: ...
 
 

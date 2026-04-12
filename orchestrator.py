@@ -11,7 +11,7 @@ from interfaces import (
     ReasoningAgent,
     ReasoningResult,
     RedditThread,
-    ToxicityClassifier,
+    ToxicityScorer,
 )
 from utils import flatten_comments
 
@@ -34,12 +34,12 @@ class UserStateTracker:
 class ModerationOrchestrator:
     def __init__(
         self,
-        classifier: ToxicityClassifier,
+        classifier: ToxicityScorer,
         reasoner: ReasoningAgent,
         intervener: InterventionAgent,
         intervention_threshold: int = 10,
     ) -> None:
-        self.classifier: ToxicityClassifier = classifier
+        self.classifier: ToxicityScorer = classifier
         self.reasoner: ReasoningAgent = reasoner
         self.intervener: InterventionAgent = intervener
         self.intervention_threshold: int = intervention_threshold
@@ -90,7 +90,7 @@ class ModerationOrchestrator:
         # that does not exist (reddit api didn't provide it, network issues, banned account, etc)
         if parent_id not in self.graph:
             self.graph.add_node(
-                parent_id,
+                node_for_adding=parent_id,
                 text="[Missing]",
                 author="Unavailable",
                 type="comment",

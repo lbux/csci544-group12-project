@@ -1,18 +1,18 @@
 import json
 from typing import cast
 
-from interfaces import Comment, RedditThread, ToxicityClassifier
+from interfaces import Comment, RedditThread, ToxicityScorer
 
 
 class ThreadFilter:
     def __init__(
         self,
-        classifier: ToxicityClassifier,
+        classifier: ToxicityScorer,
         max_threads: int = 5,
         chain_threshold: float = 0.75,
         chain_length: int = 2,
     ) -> None:
-        self.classifier: ToxicityClassifier = classifier
+        self.classifier: ToxicityScorer = classifier
         self.max_threads: int = max_threads
         self.chain_threshold: float = chain_threshold
         self.chain_length: int = chain_length
