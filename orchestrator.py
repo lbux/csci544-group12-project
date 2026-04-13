@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from collections import defaultdict
 
 import networkx as nx
@@ -107,6 +108,18 @@ class ModerationOrchestrator:
             reasoning: ReasoningResult = self.reasoner.analyze_intent(
                 text, parent_text, root_context
             )
+
+            log_entry = {
+                "comment_id": node_id,
+                "author": author,
+                "text": text,
+                "context": parent_text,
+                "topic": root_context,
+                "reasoning": reasoning.model_dump(),
+            }
+
+            with open("reasoning_logs.jsonl", "a", encoding="utf-8") as f:
+                _ = f.write(json.dumps(log_entry) + "\n")
 
             if reasoning.category in ["toxic", "zero-tolerance"]:
                 # If the model categorizes as the comment as anything other than a heated flare, penalize

@@ -23,9 +23,9 @@ class RedditThread(TypedDict):
 
 
 class ReasoningResult(BaseModel):
+    explanation: str
     category: str  # e.g., "flare", "toxic", "zero-tolerance"
     points: int
-    explanation: str
 
 
 class InterventionResult(TypedDict):
