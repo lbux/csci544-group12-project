@@ -24,6 +24,7 @@ class LLMReasoner:
     def analyze_intent(
         self, comment_body: str, parent_body: str, thread_context: str
     ) -> ReasoningResult:
+        """Takes the comment, parent comment, and thread body as context to produce a reasoning result from the LLM Reasoner"""
 
         USER_MESSAGE: str = f"""
         Original Post:
@@ -65,7 +66,7 @@ class ToxicityClassifier:
         )
 
     def predict(self, text: str) -> float:
-
+        """"Assigns a Toxicity score to the input using a pre-trained classifier"""
         # print(self.ort_model.config)
 
         inputs = self.tokenizer(  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]

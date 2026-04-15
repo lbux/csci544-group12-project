@@ -11,6 +11,7 @@ from networkx.drawing.nx_pydot import graphviz_layout
 
 
 def visualize_graph(G: nx.DiGraph[str]) -> None:
+    """Produces a graph with dynamic data from a selected Reddit thread."""
     G_layout = nx.DiGraph()
     G_layout.add_nodes_from(G.nodes())
     G_layout.add_edges_from(G.edges())

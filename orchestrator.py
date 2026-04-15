@@ -108,7 +108,6 @@ class ModerationOrchestrator:
 
         self.graph.nodes[comment_id]["toxicity_score"] = toxicity
 
-        # TODO: Add an actual threshold that works for our data. This is a generic placeholder.
         if toxicity >= self.toxicity_threshold:
             # This would be the result of the agent. We have a category for type of toxicity, how many points to
             # penalize, and the reasoning from the agent.

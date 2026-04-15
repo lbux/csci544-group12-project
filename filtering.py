@@ -49,6 +49,7 @@ class ThreadFilter:
     #     return False
 
     def filter_file(self, input_jsonl: str, output_jsonl: str) -> list[RedditThread]:
+        """Filters the JSONL dump into an output file that meet the selectrin critera as defined by the class initialization"""
         selected_threads: list[RedditThread] = []
 
         with (
