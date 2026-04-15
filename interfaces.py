@@ -52,7 +52,7 @@ class InterventionAgent(Protocol):
         self,
         text: str,
         author: str,
-        infractions: int,
+        cumulative_penalty: int,
         parent_text: str,
         root_context: str,
         issue_type: str,

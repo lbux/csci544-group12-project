@@ -172,7 +172,7 @@ class LLMIntervener:
         self,
         text: str,
         author: str,
-        infractions: int,
+        cumulative_penalty: int,
         parent_text: str,
         root_context: str,
         issue_type: str,
@@ -190,7 +190,7 @@ class LLMIntervener:
         SYSTEM_MESSAGE = """
         You are a neutral discussion mediator for a Reddit-style thread.
 
-        Your job is to produce exactly one short intervention for a flagged message.
+        Your job is to produce exactly one short intervention for a flagged message in a thread-level moderation system.
         The intervention must:
         - stay neutral
         - avoid taking sides
@@ -210,10 +210,10 @@ class LLMIntervener:
           10. topic_refocus
 
         Strategy guidance:
-        - personal_attack -> tone_reset or claim_refocusing
-        - dismissive_condescending -> neutral_reframing or acknowledgement
-        - deadlock_loop -> common_ground or topic_refocus
-        - weak_engagement -> evidence_reasoning or clarifying_question
+        - personal_attack -> tone_reset or claim_refocusing; target can be "author" or "both"
+        - dismissive_condescending -> neutral_reframing or acknowledgement; target can be "author" or "both"
+        - deadlock_loop -> common_ground or topic_refocus; prefer target "both" or "thread"
+        - weak_engagement -> evidence_reasoning or clarifying_question; prefer target "both" or "thread"
 
         Return valid JSON only with:
         - strategy
@@ -223,11 +223,11 @@ class LLMIntervener:
         - intervention_text
 
         For v1, set tone_used to "neutral".
-        target should usually be "author" unless the strategy clearly addresses the whole discussion.
+        Because this is thread-level moderation, choose the most appropriate target from "author", "both", "thread", or "moderation_review".
         """
 
         USER_MESSAGE = f"""Current comment author: {author}
-Current cumulative infractions: {infractions}
+Current thread cumulative penalty: {cumulative_penalty}
 Issue type: {issue_type}
 Reasoning explanation: {reasoning_explanation}
 
@@ -281,18 +281,18 @@ Current comment:
             ),
             "dismissive_condescending": (
                 "neutral_reframing",
-                "author",
-                "The comment reads as dismissive, so the intervention asks for a neutral restatement without endorsing either side.",
+                "both",
+                "The comment reads as dismissive, so the intervention reframes the exchange in a neutral way without endorsing either side.",
             ),
             "deadlock_loop": (
                 "common_ground",
-                "discussion",
+                "thread",
                 "The exchange appears stuck in a repeat loop, so the intervention tries to restart progress by identifying shared ground.",
             ),
             "weak_engagement": (
                 "evidence_reasoning",
-                "author",
-                "The comment lacks supporting reasoning, so the intervention asks for clearer evidence or explanation.",
+                "both",
+                "The thread is light on supporting reasoning, so the intervention asks for clearer evidence or explanation from the discussion.",
             ),
         }
         strategy, target, rationale = strategy_map.get(
