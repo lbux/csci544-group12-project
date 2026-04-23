@@ -29,6 +29,12 @@ def parse_args() -> argparse.Namespace:
         default="Reddit discussion thread from r/Abortiondebate.",
         help="Topic context passed to the judge for every entry.",
     )
+    parser.add_argument(
+        "--use-debate-rubric",
+        action="store_true",
+        help="Use the debate-aware judge (subtle-hostility sensitive) "
+        "instead of the original LLMReasoner rubric.",
+    )
     return parser.parse_args()
 
 
@@ -38,7 +44,12 @@ def main() -> None:
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    judge = LLMReasoner(model=args.judge_model)
+    if args.use_debate_rubric:
+        from debate_judge import DebateAwareReasoner
+
+        judge = DebateAwareReasoner(model=args.judge_model)
+    else:
+        judge = LLMReasoner(model=args.judge_model)
     entries = [json.loads(line) for line in open(input_path) if line.strip()]
     print(f"Judging {len(entries)} entries with {args.judge_model} ...")
 
