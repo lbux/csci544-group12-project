@@ -25,9 +25,10 @@ class DebateAgent:
     Methods:
         speak(history, stream): generates a statement based on the agent's persona and the debate history
     """
-    def __init__(self, model: str, stream: bool, topic: str, name: str, persona: str, arguments: list[str] = []):
+    def __init__(self, model: str, stream: bool, thinking: bool, topic: str, name: str, persona: str, arguments: list[str] = []):
         self.model: str = model
         self.stream: bool = stream
+        self.thinking: bool = thinking
 
         self.topic: str = topic
         self.name: str = name
@@ -53,7 +54,7 @@ class DebateAgent:
             model=self.model,
             messages=chat_messages,
             stream=self.stream,
-            extra_body={"chat_template_kwargs": {"enable_thinking": False}}
+            extra_body={"chat_template_kwargs": {"enable_thinking": self.thinking}}
         )
 
         # extract text from response
@@ -118,7 +119,9 @@ def save_history(debate_id: str, history: list[DebateTurn], topic: str, debate_r
     """Save the debate history to a jsonl file."""
     # if no output directory, create one
     Path(out_dir).mkdir(parents=True, exist_ok=True)
-    out_path = Path(out_dir) / f"naive_{topic}_{debate_id}_{args.model.replace(':', '_')}.jsonl".replace(" ", "_")
+    topic_name = safe_filename_piece(topic)
+    model_name = safe_filename_piece(args.model)
+    out_path = Path(out_dir) / f"naive_{topic_name}_{debate_id}_{model_name}.jsonl"
     with open(out_path, "w") as f:
         for turn_idx, turn in enumerate(history):
             json_record = {
@@ -130,6 +133,10 @@ def save_history(debate_id: str, history: list[DebateTurn], topic: str, debate_r
             }
             f.write(json.dumps(json_record, ensure_ascii=False) + "\n")
     print(f"Debate history saved to {out_path}")
+
+
+def safe_filename_piece(value: str) -> str:
+    return "".join(ch if ch.isalnum() or ch in "-_." else "_" for ch in value)
 
 
 def debate(agents: tuple[DebateAgent, DebateAgent], debate_round: int = 4) -> list[DebateTurn]:
@@ -166,6 +173,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--api-key", default="ollama", help="API key for authentication (default: ollama).")
     parser.add_argument("--model", default="llama3.1:8b", help="LLM model to use (default: llama3.1:8b).")
     parser.add_argument("--stream", action=argparse.BooleanOptionalAction, default=True, help="Enable or disable streaming (default: True).")
+    # Ollama's OpenAI-compatible API may ignore --no-thinking for some models.
+    parser.add_argument("--thinking", action=argparse.BooleanOptionalAction, default=True, help="Request model thinking mode via chat_template_kwargs (default: True).")
     
     # Debate settings
     parser.add_argument("--rounds", type=int, default=3, help="Number of debate rounds (default: 3).")
@@ -179,7 +188,9 @@ if __name__ == "__main__":
     args = parse_args()
     
     # Initialize OpenAI client
-    # NOTE: it seems thinking mode can't be turned off via ollama + OpenAI SDK; Qwen3.5 still can think, but vllm won't have the problem
+    # NOTE: it seems thinking mode can't always be turned off via Ollama's
+    # OpenAI-compatible API; Qwen3.5 may still think even with --no-thinking.
+    # vLLM handles this more reliably.
     client = OpenAI(
         base_url=args.base_url,
         api_key=args.api_key,
@@ -208,6 +219,7 @@ if __name__ == "__main__":
     agent_1 = DebateAgent(
         model=args.model,
         stream=args.stream,
+        thinking=args.thinking,
         topic=TOPIC,
         name=AGENTS["1"]["name"],
         persona=AGENTS["1"]["persona"],
@@ -216,6 +228,7 @@ if __name__ == "__main__":
     agent_2 = DebateAgent(
         model=args.model,
         stream=args.stream,
+        thinking=args.thinking,
         topic=TOPIC,
         name=AGENTS["2"]["name"],
         persona=AGENTS["2"]["persona"],
@@ -229,6 +242,7 @@ if __name__ == "__main__":
     print(f"LLM Model: {args.model}")
     print(f"Debate Rounds: {args.rounds}")
     print(f"Stream: {args.stream}")
+    print(f"Thinking requested: {args.thinking}")
     print("=" * 50)
 
     history = debate(agents=(agent_1, agent_2), debate_round=args.rounds)

@@ -50,6 +50,7 @@ class RedditDebateAgent:
         client: OpenAI,
         model: str,
         stream: bool,
+        thinking: bool,
         topic: str,
         name: str,
         persona: str,
@@ -60,6 +61,7 @@ class RedditDebateAgent:
         self.client = client
         self.model = model
         self.stream = stream
+        self.thinking = thinking
         self.topic = topic
         self.name = name
         self.persona = persona
@@ -74,7 +76,7 @@ class RedditDebateAgent:
             model=self.model,
             messages=chat_messages,
             stream=self.stream,
-            extra_body={"chat_template_kwargs": {"enable_thinking": False}},
+            extra_body={"chat_template_kwargs": {"enable_thinking": self.thinking}},
         )
 
         if self.stream is False:
@@ -440,6 +442,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--api-key", default="ollama")
     parser.add_argument("--model", default="llama3.1:8b", help="Model to use.")
     parser.add_argument("--stream", action=argparse.BooleanOptionalAction, default=True)
+    # Ollama's OpenAI-compatible API may ignore --no-thinking for some models.
+    parser.add_argument("--thinking", action=argparse.BooleanOptionalAction, default=True, help="Request model thinking mode via chat_template_kwargs.")
 
     # Reddit seed selection settings
     parser.add_argument("--submission-index", type=int, default=0)
@@ -460,6 +464,7 @@ if __name__ == "__main__":
     args = parse_args()
     model = args.model
     stream = args.stream
+    thinking = args.thinking
     debate_round = args.rounds
     TOPIC = "abortion rights"
 
@@ -475,6 +480,7 @@ if __name__ == "__main__":
     print(f"LLM Model: {model}")
     print(f"Generated Rounds: {debate_round}")
     print(f"Stream: {stream}")
+    print(f"Thinking requested: {thinking}")
     print("=" * 50)
 
     if args.no_generate:
@@ -489,6 +495,7 @@ if __name__ == "__main__":
             client=client,
             model=model,
             stream=stream,
+            thinking=thinking,
             topic=TOPIC,
             name=alignment_profiles[0]["name"],
             persona=alignment_profiles[0]["persona"],
@@ -500,6 +507,7 @@ if __name__ == "__main__":
             client=client,
             model=model,
             stream=stream,
+            thinking=thinking,
             topic=TOPIC,
             name=alignment_profiles[1]["name"],
             persona=alignment_profiles[1]["persona"],

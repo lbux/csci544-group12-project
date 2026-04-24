@@ -11,8 +11,8 @@ wheels/
 
 *.vscode
 *.jsonl
-!sim_debate_records/naive_abortion_rights_aece1_llama3.1_8b.jsonl
-!sim_debate_records/reddit_abortion_rights_1s3uc44_27a61_llama3.1_8b.jsonl
+!sim_debate_records/*/*.jsonl
+!sim_debate_records/*.jsonl
 !eval_records/*.jsonl
 
 .DS_Store
