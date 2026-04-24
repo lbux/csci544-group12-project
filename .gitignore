@@ -11,9 +11,7 @@ wheels/
 
 *.vscode
 *.jsonl
-!sim_debate_records/*/*.jsonl
-!sim_debate_records/*.jsonl
-!eval_records/*.jsonl
+
 
 .DS_Store
 
