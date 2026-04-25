@@ -1,33 +1,62 @@
 {
-  "gemma4_e4b/moderated_reddit_abortion_rights_1s3uc44_4ef4e_gemma4_e4b.jsonl": {
+  "moderated_reddit_abortion_rights_1s3uc44_064d5_fredrezones55_Gemma-4-Uncensored-HauhauCS-Aggressive_e4b.jsonl": {
     "seed": {
       "n": 9,
       "categories": {
         "fp": 3,
-        "flare": 2,
-        "toxic": 4
+        "toxic": 3,
+        "flare": 3
       },
-      "points_total": 16,
+      "points_total": 13,
       "roberta_max": 0.999496340751648
     },
     "generated": {
       "n": 16,
       "categories": {
-        "flare": 15,
-        "toxic": 1
+        "flare": 7,
+        "toxic": 7,
+        "fp": 2
       },
-      "points_total": 32,
-      "roberta_max": 0.0004058656340930611
+      "points_total": 34,
+      "roberta_max": 0.9993226528167725
+    },
+    "mediator_turns_in_transcript": 1,
+    "threshold_sweep_generated_only": {
+      "3": 3,
+      "5": 2,
+      "7": 2,
+      "10": 2
+    }
+  },
+  "moderated_reddit_abortion_rights_1s3uc44_94b07_gemma4_e4b.jsonl": {
+    "seed": {
+      "n": 9,
+      "categories": {
+        "fp": 2,
+        "flare": 1,
+        "toxic": 6
+      },
+      "points_total": 21,
+      "roberta_max": 0.999496340751648
+    },
+    "generated": {
+      "n": 16,
+      "categories": {
+        "flare": 11,
+        "toxic": 5
+      },
+      "points_total": 36,
+      "roberta_max": 0.002173484768718481
     },
     "mediator_turns_in_transcript": 0,
     "threshold_sweep_generated_only": {
-      "3": 1,
-      "5": 0,
-      "7": 0,
-      "10": 0
+      "3": 2,
+      "5": 2,
+      "7": 1,
+      "10": 1
     }
   },
-  "gemma4_e4b/naive_abortion_rights_db34e_gemma4_e4b.jsonl": {
+  "naive_abortion_rights_735e8_gemma4_e4b.jsonl": {
     "seed": {
       "n": 0,
       "categories": {},
@@ -37,31 +66,26 @@
     "generated": {
       "n": 16,
       "categories": {
-        "fp": 1,
-        "toxic": 9,
-        "flare": 6
+        "flare": 11,
+        "toxic": 5
       },
-      "points_total": 40,
-      "roberta_max": 0.0005849726730957627
+      "points_total": 36,
+      "roberta_max": 0.0004902051296085119
     },
     "mediator_turns_in_transcript": 0,
     "threshold_sweep_generated_only": {
-      "3": 3,
-      "5": 3,
-      "7": 3,
-      "10": 2
+      "3": 2,
+      "5": 2,
+      "7": 2,
+      "10": 1
     }
   },
-  "gemma4_e4b/reddit_abortion_rights_1s3uc44_efba6_gemma4_e4b.jsonl": {
+  "naive_abortion_rights_7de13_fredrezones55_Gemma-4-Uncensored-HauhauCS-Aggressive_e4b.jsonl": {
     "seed": {
-      "n": 9,
-      "categories": {
-        "fp": 4,
-        "flare": 3,
-        "toxic": 2
-      },
-      "points_total": 10,
-      "roberta_max": 0.999496340751648
+      "n": 0,
+      "categories": {},
+      "points_total": 0,
+      "roberta_max": 0.0
     },
     "generated": {
       "n": 16,
@@ -70,7 +94,7 @@
         "toxic": 3
       },
       "points_total": 34,
-      "roberta_max": 0.0008918321109376848
+      "roberta_max": 0.0005207331269048154
     },
     "mediator_turns_in_transcript": 0,
     "threshold_sweep_generated_only": {
@@ -80,85 +104,60 @@
       "10": 1
     }
   },
-  "gemma4_uncensored/moderated_reddit_abortion_rights_1s3uc44_26456_fredrezones55_Gemma-4-Uncensored-HauhauCS-Aggressive_e4b.jsonl": {
+  "reddit_abortion_rights_1s3uc44_2bfa4_gemma4_e4b.jsonl": {
     "seed": {
       "n": 9,
       "categories": {
-        "toxic": 4,
-        "flare": 5
+        "fp": 1,
+        "toxic": 6,
+        "flare": 2
       },
-      "points_total": 20,
+      "points_total": 23,
       "roberta_max": 0.999496340751648
     },
     "generated": {
       "n": 16,
       "categories": {
-        "flare": 15,
-        "toxic": 1
+        "flare": 13,
+        "toxic": 3
       },
-      "points_total": 29,
-      "roberta_max": 0.9908118844032288
+      "points_total": 33,
+      "roberta_max": 0.0004676189855672419
     },
     "mediator_turns_in_transcript": 0,
     "threshold_sweep_generated_only": {
       "3": 1,
-      "5": 0,
-      "7": 0,
+      "5": 1,
+      "7": 1,
       "10": 0
     }
   },
-  "gemma4_uncensored/naive_abortion_rights_6dc60_fredrezones55_Gemma-4-Uncensored-HauhauCS-Aggressive_e4b.jsonl": {
-    "seed": {
-      "n": 0,
-      "categories": {},
-      "points_total": 0,
-      "roberta_max": 0.0
-    },
-    "generated": {
-      "n": 16,
-      "categories": {
-        "fp": 1,
-        "toxic": 4,
-        "flare": 11
-      },
-      "points_total": 30,
-      "roberta_max": 0.000447653466835618
-    },
-    "mediator_turns_in_transcript": 0,
-    "threshold_sweep_generated_only": {
-      "3": 2,
-      "5": 1,
-      "7": 1,
-      "10": 1
-    }
-  },
-  "gemma4_uncensored/reddit_abortion_rights_1s3uc44_dea65_fredrezones55_Gemma-4-Uncensored-HauhauCS-Aggressive_e4b.jsonl": {
+  "reddit_abortion_rights_1s3uc44_51716_fredrezones55_Gemma-4-Uncensored-HauhauCS-Aggressive_e4b.jsonl": {
     "seed": {
       "n": 9,
       "categories": {
-        "flare": 4,
-        "fp": 1,
+        "fp": 2,
+        "flare": 3,
         "toxic": 4
       },
-      "points_total": 17,
+      "points_total": 18,
       "roberta_max": 0.999496340751648
     },
     "generated": {
       "n": 16,
       "categories": {
-        "toxic": 8,
-        "fp": 1,
-        "flare": 7
+        "flare": 14,
+        "toxic": 2
       },
-      "points_total": 40,
-      "roberta_max": 0.9992839694023132
+      "points_total": 30,
+      "roberta_max": 0.9990662932395935
     },
     "mediator_turns_in_transcript": 0,
     "threshold_sweep_generated_only": {
-      "3": 3,
-      "5": 3,
-      "7": 2,
-      "10": 2
+      "3": 1,
+      "5": 1,
+      "7": 0,
+      "10": 0
     }
   }
 }
