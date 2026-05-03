@@ -6,6 +6,9 @@
 
 * A Jupyter Notebook Environment
 
+Before you begin, it is strongly recommended that you run this  on a computer with at least 16GBs of VRAM/RAM for optimal performance. You may be able to get away with 8GBs of VRAM/RAM but the token count per second will suffer.
+
+These simulations were ran on a machine with a 4070 ti super.
 # How to Run
 1) Install dependencies
 
@@ -29,6 +32,8 @@
     Open `run_pipeline.ipynb` and select Run All.
 
     The raw Reddit data is already provided in the `data/` folder, so the pipeline will automatically skip the web-scraping step and proceed directly to scoring, filtering, simulation, and evaluation.
+
+    The notebook contains a quick summary of what each section does and how the results are generated.
 
 4) Analyze the code
 
