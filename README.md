@@ -1,11 +1,35 @@
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
+# Prerequisites
 
-Install [graphviz](https://graphviz.org/download/)
+* Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-Install [ollama](https://ollama.com/download)
+* Install [ollama](https://ollama.com/download)
 
-Run `uv sync` to install dependencies
+* A Jupyter Notebook Environment
 
-For testing purposes, rename one of the `.jsonl` files to `data.jsonl`
+# How to Run
+1) Install dependencies
 
-Run `uv run python main.py` to see 2 random visualizations with dummy data
+    Run this in the root directory to install packages via `uv`
+
+    ```
+    uv sync
+    ```
+2) Download Local Models
+
+    Ensure Ollama is running and run the following commands (WARNING: This is almost 20GBs)
+    ```
+    ollama pull llama3.1:8b
+    ollama pull llama3.2:3b
+    ollama pull gemma4:e4b
+    ollama pull fredrezones55/Gemma-4-Uncensored-HauhauCS-Aggressive:e4b
+    ```
+    (Note: The DeBERTa toxicity classifier does not need an Ollama pull; the code will automatically download it from HuggingFace on the first run.)
+3) Run the Pipeline
+
+    Open `run_pipeline.ipynb` and select Run All.
+
+    The raw Reddit data is already provided in the `data/` folder, so the pipeline will automatically skip the web-scraping step and proceed directly to scoring, filtering, simulation, and evaluation.
+
+4) Analyze the code
+
+    Each folder contains a README.md with a summary of the functions and classes contained within.
