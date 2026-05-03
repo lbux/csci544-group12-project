@@ -29,3 +29,7 @@
     Open `run_pipeline.ipynb` and select Run All.
 
     The raw Reddit data is already provided in the `data/` folder, so the pipeline will automatically skip the web-scraping step and proceed directly to scoring, filtering, simulation, and evaluation.
+
+4) Analyze the code
+
+    Each folder contains a README.md with a summary of the functions and classes contained within.
